@@ -10,22 +10,20 @@ ENV MAVEN_HOME /opt/maven
 
 ENV PATH $GROOVY_HOME/bin:$MAVEN_HOME/bin:$PATH
 
-RUN echo "Downloading Groovy" 
-RUN wget --no-verbose --output-document=groovy.zip "http://mirror.bit.edu.cn/apache/groovy/${GROOVY_VERSION}/distribution/apache-groovy-binary-${GROOVY_VERSION}.zip" 
-
-RUN echo "Unzip Groovy" 
-RUN unzip groovy.zip 
-RUN rm groovy.zip 
-RUN mv "groovy-${GROOVY_VERSION}" "${GROOVY_HOME}/" 
+RUN echo "Downloading Groovy" \
+    && wget --no-verbose --output-document=groovy.zip "http://mirror.bit.edu.cn/apache/groovy/${GROOVY_VERSION}/distribution/apache-groovy-binary-${GROOVY_VERSION}.zip"  \
+    && echo "Unzip Groovy" \
+    && unzip groovy.zip \
+    && rm groovy.zip \
+    && mv "groovy-${GROOVY_VERSION}" "${GROOVY_HOME}/" \
+    && echo "Downloading Maven" \
+    && wget --no-verbose --output-document=maven.zip "http://mirror.bit.edu.cn/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip" \
+    && echo "Unzip Maven" \
+    && unzip maven.zip \
+    && rm maven.zip \
+    && mv "apache-maven-${MAVEN_VERSION}" "${MAVEN_HOME}/" \
+    && echo "Assign Aliyun Maven Conf" \
+    && mv $MAVEN_HOME/conf/settings.xml $MAVEN_HOME/conf/settings.xml.bak
     
-RUN echo "Downloading Maven"
-RUN wget --no-verbose --output-document=maven.zip "http://mirror.bit.edu.cn/apache/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip"
-RUN echo "Unzip Maven" 
-RUN unzip maven.zip 
-RUN rm maven.zip 
-RUN mv "apache-maven-${MAVEN_VERSION}" "${MAVEN_HOME}/" 
-
-RUN echo "Assign Aliyun Maven Conf"
-RUN mv $MAVEN_HOME/conf/settings.xml $MAVEN_HOME/conf/settings.xml.bak
 COPY settings.xml $MAVEN_HOME/conf/settings.xml
 
